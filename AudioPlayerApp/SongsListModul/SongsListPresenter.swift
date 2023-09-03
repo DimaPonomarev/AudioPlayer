@@ -15,24 +15,29 @@ protocol SongsListPresentationProtocol: AnyObject{
 }
 
 class SongsListPresenter: SongsListPresentationProtocol {
+    
+    //MARK: - MVP Properties
+
     weak var viewController: SongsListDisplayLogic?
     var router: SongsListRouterProtocol?
+    
+    //MARK: - Public Methods
+    //convert metadata to SongsList model and pass to SongListViewController
 
-    func getMetadataFromSong() async -> [SongsList]? {
+    public func getMetadataFromSong() async -> [SongsList]? {
         var metadataArrayForAllSongs = [SongsList]()
         guard let arrayOfSongs = SourceOfSongs.songs else { return nil }
         for eachSong in arrayOfSongs {
-            
             let audioAsset = AVURLAsset.init(url: eachSong, options: nil)
             do {
                 let metadataOfEachSong = try await audioAsset.load(.metadata, .duration)
                 var instanceOfMetadataArray: SongsList = SongsList()
-                instanceOfMetadataArray.duration = metadataOfEachSong.1.seconds
+                instanceOfMetadataArray.duration = metadataOfEachSong.1.songsDurationString
                 instanceOfMetadataArray.urlPath = eachSong
                 
-                metadataOfEachSong.0.forEach { item in
-                    guard let key = item.commonKey,
-                          let value = item.value else { return }
+                metadataOfEachSong.0.forEach { metadata in
+                    guard let key = metadata.commonKey,
+                          let value = metadata.value else { return }
                     switch key.rawValue {
                     case "artist": instanceOfMetadataArray.artistName = value as? String
                     case "title" : instanceOfMetadataArray.songName = value as? String

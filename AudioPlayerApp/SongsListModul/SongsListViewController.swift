@@ -11,10 +11,6 @@ import SnapKit
 import AVFoundation
 import MediaPlayer
 
-//var songs: [SongsList] = [SongsList(artistName: "name", albumName: "album", artistName: "artist", imageName: "image", duration: "songs"),
-//                          SongsList(artistName: "name1", albumName: "album1", artistName: "artist1", imageName: "image1", duration: "song")]
-
-
 protocol SongsListDisplayLogic: UIViewController {
     var presenter: SongsListPresentationProtocol? {get set}
 }
@@ -23,26 +19,26 @@ class SongsListViewController: UIViewController, SongsListDisplayLogic {
     
     //MARK: - MVP Properties
     
-    var presenter: SongsListPresentationProtocol?
-    
-    var metadataOfAllSongs = [SongsList]()
+    public var presenter: SongsListPresentationProtocol?
     
     //MARK: - UI properties
     
-    let tableView = UITableView()
+    private let tableView = UITableView()
+    
+    //MARK: - Data variables
+    
+    private var metadataOfAllSongs = [SongsList]()
     
     // MARK: - Init
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?){
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
-        
     }
     
     required init?(coder aDecoder: NSCoder){
         super.init(coder: aDecoder)
         setup()
-        
     }
     
     // MARK: - Setup
@@ -63,10 +59,12 @@ class SongsListViewController: UIViewController, SongsListDisplayLogic {
     }
 }
 
+//MARK: - Private Methods
+
 private extension SongsListViewController {
     
     //MARK: - getMetaDataToShowSongsOnScreen
-
+    
     func getMetaDataToShowSongsOnScreen() {
         Task {
             let metadata = await presenter?.getMetadataFromSong()
@@ -99,6 +97,9 @@ private extension SongsListViewController {
     }
 }
 
+//MARK: - extension UITableViewDataSource, UITableViewDelegate
+
+
 extension SongsListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         metadataOfAllSongs.count
@@ -116,43 +117,3 @@ extension SongsListViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-
-
-
-
-
-
-
-
-
-//MARK: - makePlayer
-
-//        func makePlayerMetaData() async {
-//
-//            var info: SongsList = SongsList()
-//            guard let listOfSongs = SourceOfSongs.songs else { return }
-//            for eachSong in listOfSongs {
-//
-//                let audioAsset = AVURLAsset.init(url: eachSong, options: nil)
-//                do {
-//                    let meta = try await audioAsset.load(.metadata, .duration)
-//                    info.duration = meta.1.seconds
-//                    info.urlPath = eachSong
-//
-//                    meta.0.forEach { item in
-//                        guard let key = item.commonKey,
-//                              let value = item.value else { return }
-//                        switch key.rawValue {
-//                        case "artist": info.artistName = value as? String
-//                        case "title" : info.songName = value as? String
-//                        default: return
-//                        }
-//                    }
-//                    self.myMetaData.append(info)
-//                    self.tableView.reloadData()
-//                }
-//                catch {
-//                    print("error to get metadata")
-//                }
-//            }
-//        }

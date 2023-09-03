@@ -33,10 +33,11 @@ class SongsListTableViewCell: UITableViewCell {
     // MARK: - Public Methods
     
     func configureView(_ model: SongsList) {
-        songsName.text = model.fullname
-        songsDuration.text = "\(model.dur)"
+
+
+        songsName.text = "\(model.artistName!) - \(model.songName!)"
+        songsDuration.text = model.duration
     }
-    
 }
 
 //MARK: - Private methods
@@ -48,7 +49,8 @@ private extension SongsListTableViewCell {
     func setup() {
         addViews()
         makeConstraints()
-        setupViews()
+        
+        
     }
     
     //MARK: - addViews
@@ -60,7 +62,6 @@ private extension SongsListTableViewCell {
     
     //MARK: - makeConstraints
     
-    
     func makeConstraints() {
         songsName.snp.makeConstraints {
             $0.left.top.bottom.equalToSuperview().inset(20)
@@ -68,14 +69,6 @@ private extension SongsListTableViewCell {
         }
         songsDuration.snp.makeConstraints {
             $0.right.top.bottom.equalToSuperview().inset(20)
-            $0.width.equalTo(40)
         }
-    } 
-    
-    //MARK: - setupViews
-    
-    func setupViews() {
-        songsDuration.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-
     }
 }

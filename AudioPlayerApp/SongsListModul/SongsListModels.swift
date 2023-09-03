@@ -11,18 +11,7 @@ struct SongsList {
     var songName: String?
     var urlPath: URL?
     var artistName: String?
-    var duration: Double?
-}
-
-extension SongsList {
-    var fullname: String {
-        guard artistName != nil, songName != nil else { return ""}
-        return "\(self.artistName!) - \(self.songName!)"
-    }
-    var dur: Double {
-        guard duration != nil else { return 0 }
-        return Double(round(self.duration! / 60 * Double(100)) / 100)
-    }
+    var duration: String?
 }
 
 class SourceOfSongs {
@@ -46,10 +35,6 @@ class SourceOfSongs {
         songs.append(audioPath7)
         guard let audioPath8 = Bundle.main.url(forResource: "song8", withExtension: "mp3") else { return nil }
         songs.append(audioPath8)
-        songs.append(audioPath1)
-        songs.append(audioPath2)
-        songs.append(audioPath1)
-
 
         return songs
     }
