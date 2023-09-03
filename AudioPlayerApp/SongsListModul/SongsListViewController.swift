@@ -56,6 +56,7 @@ class SongsListViewController: UIViewController, SongsListDisplayLogic {
         makeConstraints()
         setupViews()
         getMetaDataToShowSongsOnScreen()
+        print(Bundle.main.url(forResource: "track2", withExtension: "mp3"))
     }
 }
 
